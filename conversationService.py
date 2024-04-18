@@ -68,7 +68,7 @@ def transcribe(audio_np: np.ndarray) -> str:
     Returns:
         str: The transcribed text.
     """
-    result = stt.transcribe(audio_np, fp16=False)  # Set fp16=True if using a GPU
+    result = stt.transcribe(audio_np, fp16=True)  # Set fp16=True if using a GPU
     text = result["text"].strip()
     return text
 
