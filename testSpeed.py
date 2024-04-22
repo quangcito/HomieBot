@@ -11,6 +11,8 @@ from langchain.prompts import PromptTemplate
 from langchain_community.llms import Ollama
 import pyttsx3
 
+# Run "o"llama run stable-cod" in the terminal for optimized Llama
+
 console = Console()
 stt = whisper.load_model("base.en")
 engine = pyttsx3.init()
