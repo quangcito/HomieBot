@@ -10,6 +10,7 @@ from langchain.chains import ConversationChain
 from langchain.prompts import PromptTemplate
 from langchain_community.llms import Ollama
 import pyttsx3
+import cProfile
 
 # Run "o"llama run stable-cod" in the terminal for optimized Llama
 
@@ -103,45 +104,49 @@ if __name__ == "__main__":
     console.print("[cyan]HomieBot started! Press Ctrl+C to exit.")
 
     introduce_homiebot()
+    with cProfile.Profile() as pr:
 
-    try:
-        while True:
-            console.input(
-                "Press Enter to start recording, then press Enter again to stop."
-            )
-
-            data_queue = Queue()  # type: ignore[var-annotated]
-            stop_event = threading.Event()
-            recording_thread = threading.Thread(
-                target=record_audio,
-                args=(stop_event, data_queue),
-            )
-            recording_thread.start()
-
-            input()
-            stop_event.set()
-            recording_thread.join()
-
-            audio_data = b"".join(list(data_queue.queue))
-            audio_np = (
-                np.frombuffer(audio_data, dtype=np.int16).astype(np.float32) / 32768.0
-            )
-
-            if audio_np.size > 0:
-                with console.status("Transcribing...", spinner="earth"):
-                    text = transcribe(audio_np)
-                console.print(f"[yellow]You: {text}")
-
-                with console.status("Generating response...", spinner="earth"):
-                    response = get_llm_response(text)
-                    console.print(f"[cyan]HomieBot: {response}")
-                    speak_response(response)
-            else:
-                console.print(
-                    "[red]No audio recorded. Please ensure your microphone is working."
+        try:
+            while True:
+                console.input(
+                    "Press Enter to start recording, then press Enter again to stop."
                 )
 
-    except KeyboardInterrupt:
-        console.print("\n[red]Exiting...")
+                data_queue = Queue()  # type: ignore[var-annotated]
+                stop_event = threading.Event()
+                recording_thread = threading.Thread(
+                    target=record_audio,
+                    args=(stop_event, data_queue),
+                )
+                recording_thread.start()
+
+                input()
+                stop_event.set()
+                recording_thread.join()
+
+                audio_data = b"".join(list(data_queue.queue))
+                audio_np = (
+                    np.frombuffer(audio_data, dtype=np.int16).astype(np.float32) / 32768.0
+                )
+
+                if audio_np.size > 0:
+                    with console.status("Transcribing...", spinner="earth"):
+                        text = transcribe(audio_np)
+                    console.print(f"[yellow]You: {text}")
+
+                    with console.status("Generating response...", spinner="earth"):
+                        response = get_llm_response(text)
+                        console.print(f"[cyan]HomieBot: {response}")
+                        speak_response(response)
+                    pr.print_stats()
+                else:
+                    console.print(
+                        "[red]No audio recorded. Please ensure your microphone is working."
+                    )
+
+
+        except KeyboardInterrupt:
+            console.print("\n[red]Exiting...")
+
 
     console.print("[blue]Session ended.")
