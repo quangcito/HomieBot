@@ -11,15 +11,20 @@ from langchain.chains import ConversationChain
 from langchain.prompts import PromptTemplate
 from langchain_community.llms import Ollama
 import pyttsx3
+import re
 
 console = Console()
 stt = whisper.load_model("base.en")
 engine = pyttsx3.init()
 
 template = """
-You are a friendly homie that seeks to converse with a fellow homie (user). You speak as a close friend of the user would. 
-You aim to provide responses as fast as possible, to maintain the flow of conversation. Your main objective is to be a conversation partner,
-engaging in what one may call small talk. Speak in the manner that the user speaks to you, including slang and such. You aim to provide responses in less than 30 words.
+You are a friendly homie that seeks to converse with a fellow homie (user). 
+Do not use any emojis or emoticons in your response. Do not use any contractions in your response.
+You speak as a close friend of the user would. 
+You aim to provide responses as fast as possible, to maintain the flow of conversation. 
+Your main objective is to be a conversation partner,
+engaging in what one may call small talk. Speak in the manner that the user speaks to you, including 
+slang and such. You aim to provide responses in less than 30 words.
 The conversation transcript is as follows:
 {history}
 And here is the user's follow-up: {input}
@@ -86,10 +91,11 @@ def get_llm_response(text: str) -> str:
     response = chain.predict(input=text)
     if response.startswith("HomieBot:"):
         response = response[len("HomieBot:") :].strip()
-    return response
+    clean_response = re.sub(r'[^a-zA-Z0-9\s]', '', response) # include punctuation back in
+    return clean_response
 
 def client_program():
-    host = '169.254.184.97'  # Replace w EV3 IP
+    host = '169.254.219.14'  # Replace w EV3 IP each time
     port = 5000   
 
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
