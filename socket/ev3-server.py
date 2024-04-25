@@ -1,5 +1,6 @@
 import socket
 import ev3dev2.motor as ev3_motor
+from ev3dev2.sound import Sound
 
 left_motor = ev3_motor.LargeMotor(ev3_motor.OUTPUT_B)
 right_motor = ev3_motor.LargeMotor(ev3_motor.OUTPUT_C)
@@ -15,6 +16,8 @@ def server_program():
     server_socket.listen(5)
     print("Server is listening...")
 
+    sound = Sound()
+
     while True:
         client_socket, address = server_socket.accept()
         print("Connection from:", address)
@@ -25,13 +28,7 @@ def server_program():
                 break 
 
             print("Received:", data)
-            if data.lower().strip() == 'forward':
-                left_motor.on_for_seconds(50, 50, 2, block=False)
-                right_motor.on_for_seconds(50, 50, 2, block=False)
-            elif data.lower().strip() == 'backward':
-                left_motor.on_for_seconds(-50, -50, 2, block=False)
-                right_motor.on_for_seconds(-50, -50, 2, block=False)
-            # Add more cases for other commands as needed
+            sound.speak(data)
 
         client_socket.close()
 

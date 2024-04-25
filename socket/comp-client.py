@@ -15,10 +15,7 @@ def client_program():
 
             # Send the command to the server
             client_socket.send(message.encode())
-
-            # Receive the response from the server
-            data = client_socket.recv(1024).decode()
-            print("Received:", data)
+            
     except KeyboardInterrupt:
         print("Closing connection...")
     finally:
