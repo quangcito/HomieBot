@@ -97,6 +97,7 @@ def speak_response(response):
     Args:
         response (str): The response to be spoken.
     """
+    
     engine.say(response)
     engine.runAndWait()
 
