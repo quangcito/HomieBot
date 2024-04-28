@@ -1,9 +1,15 @@
 import socket
-import ev3dev2.motor as ev3_motor
 from ev3dev2.sound import Sound
 
-left_motor = ev3_motor.LargeMotor(ev3_motor.OUTPUT_B)
-right_motor = ev3_motor.LargeMotor(ev3_motor.OUTPUT_C)
+sound = Sound()
+
+
+def introduce_homiebot():
+    """
+    Introduces HomieBot with a greeting message.
+    """
+    intro_message = "What's up dog, my name is HomieBot and my perogative is to be your homie. Let's chat! What is your name?"
+    sound.speak(intro_message)
 
 def server_program():
     host = '0.0.0.0'  
@@ -16,12 +22,12 @@ def server_program():
     server_socket.listen(5)
     print("Server is listening...")
 
-    sound = Sound()
-
     while True:
         client_socket, address = server_socket.accept()
         print("Connection from:", address)
 
+        introduce_homiebot()
+        
         while True:
             data = client_socket.recv(1024).decode()
             if not data:

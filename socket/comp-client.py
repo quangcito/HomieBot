@@ -65,8 +65,8 @@ def introduce_homiebot():
     """
     intro_message = "What's up dog, my name is HomieBot and my perogative is to be your homie. Let's chat! What is your name?"
     console.print(intro_message)
-    engine.say(intro_message)
-    engine.runAndWait()
+    # engine.say(intro_message)
+    # engine.runAndWait()
 
 def transcribe(audio_np: np.ndarray) -> str:
     """
@@ -91,11 +91,12 @@ def get_llm_response(text: str) -> str:
     response = chain.predict(input=text)
     if response.startswith("HomieBot:"):
         response = response[len("HomieBot:") :].strip()
-    clean_response = re.sub(r'[^a-zA-Z0-9\s]', '', response) # include punctuation back in
-    return clean_response
+    clean = re.sub(r'\*.*?\*', '', response)
+    cleanResponse = re.sub(r'[^a-zA-Z0-9\s.,!?;:\']', '', clean)    
+    return cleanResponse
 
 def client_program():
-    host = '169.254.219.14'  # Replace w EV3 IP each time
+    host = '169.254.23.155'  # Replace w EV3 IP each time
     port = 5000   
 
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
