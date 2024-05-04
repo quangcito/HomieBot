@@ -13,7 +13,7 @@ def introduce_homiebot():
 
 def server_program():
     host = '0.0.0.0'  
-    port = 5000  
+    port = 5043 
 
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     
@@ -21,7 +21,6 @@ def server_program():
     
     server_socket.listen(5)
     print("Server is listening...")
-
     while True:
         client_socket, address = server_socket.accept()
         print("Connection from:", address)

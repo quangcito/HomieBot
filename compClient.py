@@ -19,7 +19,6 @@ engine = pyttsx3.init()
 
 template = """
 You are a friendly homie that seeks to converse with a fellow homie (user). 
-Do not use any emojis or emoticons in your response. Do not use any contractions in your response.
 You speak as a close friend of the user would. 
 You aim to provide responses as fast as possible, to maintain the flow of conversation. 
 Your main objective is to be a conversation partner,
@@ -94,8 +93,8 @@ def get_llm_response(text: str) -> str:
     return cleanResponse
 
 def client_program():
-    host = '169.254.23.155'  # IMPORTANT: REPLACE WITH NEW EV3 WIRED IP ADDRESS EACH TIME.
-    port = 5000   
+    host = '169.254.61.137'  # IMPORTANT: REPLACE WITH NEW EV3 WIRED IP ADDRESS EACH TIME.
+    port = 5043   
 
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
@@ -105,7 +104,7 @@ def client_program():
     console.print("[cyan]HomieBot started! Press Ctrl+C to exit.")
 
     introduce_homiebot()
-
+    
     try:
         while True:
             
