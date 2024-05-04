@@ -94,7 +94,7 @@ def get_llm_response(text: str) -> str:
     return cleanResponse
 
 def client_program():
-    host = '169.254.23.155'  # Replace w EV3 IP each time
+    host = '169.254.23.155'  # IMPORTANT: REPLACE WITH NEW EV3 WIRED IP ADDRESS EACH TIME.
     port = 5000   
 
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
