@@ -65,8 +65,6 @@ def introduce_homiebot():
     """
     intro_message = "What's up dog, my name is HomieBot and my perogative is to be your homie. Let's chat! What is your name?"
     console.print(intro_message)
-    # engine.say(intro_message)
-    # engine.runAndWait()
 
 def transcribe(audio_np: np.ndarray) -> str:
     """

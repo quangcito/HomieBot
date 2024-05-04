@@ -12,7 +12,7 @@ from langchain_community.llms import Ollama
 import pyttsx3
 import cProfile
 
-# Run "o"llama run stable-cod" in the terminal for optimized Llama
+# Run "ollama run stable-cod" in the terminal for optimized Llama
 
 console = Console()
 stt = whisper.load_model("base.en")
