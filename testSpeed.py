@@ -1,3 +1,19 @@
+# ------- #
+# Author - Duy Huynh
+# Modified by - Devinn Chi, Arnika Abeysekera, Quang Nguyen 
+# ------- #
+
+
+# Install dependencies --> "pip install -r requirements.txt"
+
+
+"""
+This file was used to test optimization methods such as threading and replacing usage of the bark 
+AI model. This file does not implement connection with the EV3 robot
+"""
+
+
+# import statements
 import time
 import threading
 import numpy as np
@@ -14,11 +30,14 @@ import cProfile
 
 # Run "ollama run stable-cod" in the terminal for optimized Llama
 
+
+# initialization of console, whisper model, pyttsx3 speech engine
 console = Console()
 stt = whisper.load_model("base.en")
 engine = pyttsx3.init()
 
 
+# template controlling chatbot personality and parameters / Prompt initialization
 template = """
 You are a friendly homie that seeks to converse with a fellow homie (user). You speak as a close friend of the user would. 
 You aim to provide responses as fast as possible, to maintain the flow of conversation. Your main objective is to be a conversation partner,
@@ -30,12 +49,15 @@ Your response:
 """
 PROMPT = PromptTemplate(input_variables=["history", "input"], template=template)
 
+
+# conversation chain initialization with prompt, Ollama model loaded
 chain = ConversationChain(
     prompt=PROMPT,
     verbose=False,
     memory=ConversationBufferMemory(ai_prefix="HomieBot:"),
     llm=Ollama(),
 )
+
 
 def record_audio(stop_event, data_queue):
     """
@@ -57,6 +79,7 @@ def record_audio(stop_event, data_queue):
         while not stop_event.is_set():
             time.sleep(0.1)
 
+
 def introduce_homiebot():
     """
     Introduces HomieBot with a greeting message.
@@ -65,6 +88,7 @@ def introduce_homiebot():
     console.print(intro_message)
     engine.say(intro_message)
     engine.runAndWait()
+
 
 def transcribe(audio_np: np.ndarray) -> str:
     """
@@ -77,6 +101,7 @@ def transcribe(audio_np: np.ndarray) -> str:
     result = stt.transcribe(audio_np, fp16=False)  # Set fp16=True if using a GPU
     text = result["text"].strip()
     return text
+
 
 def get_llm_response(text: str) -> str:
     """
@@ -91,6 +116,7 @@ def get_llm_response(text: str) -> str:
         response = response[len("HomieBot:") :].strip()
     return response
 
+
 def speak_response(response):
     """
     Speaks the generated response.
@@ -100,6 +126,7 @@ def speak_response(response):
     
     engine.say(response)
     engine.runAndWait()
+
 
 if __name__ == "__main__":
     console.print("[cyan]HomieBot started! Press Ctrl+C to exit.")

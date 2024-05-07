@@ -1,3 +1,13 @@
+# ------- #
+# Author - Duy Huynh
+# Modified by - Devinn Chi, Arnika Abeysekera, Quang Nguyen 
+# ------- #
+
+
+# Install dependencies --> "pip install -r requirements.txt"
+
+
+# import statements
 import socket
 import time
 import threading
@@ -13,10 +23,14 @@ from langchain_community.llms import Ollama
 import pyttsx3
 import re
 
+
+# initialization of console, whisper model, pyttsx3 speech engine
 console = Console()
 stt = whisper.load_model("base.en")
 engine = pyttsx3.init()
 
+
+# template controlling chatbot personality and parameters / Prompt initialization
 template = """
 You are a friendly homie that seeks to converse with a fellow homie (user). 
 You speak as a close friend of the user would. 
@@ -31,6 +45,8 @@ Your response:
 """
 PROMPT = PromptTemplate(input_variables=["history", "input"], template=template)
 
+
+# conversation chain initialization with prompt, Ollama model loaded
 chain = ConversationChain(
     prompt=PROMPT,
     verbose=False,
@@ -58,12 +74,14 @@ def record_audio(stop_event, data_queue):
         while not stop_event.is_set():
             time.sleep(0.1)
 
+
 def introduce_homiebot():
     """
     Introduces HomieBot with a greeting message.
     """
     intro_message = "What's up dog, my name is HomieBot and my perogative is to be your homie. Let's chat! What is your name?"
     console.print(intro_message)
+
 
 def transcribe(audio_np: np.ndarray) -> str:
     """
@@ -76,6 +94,7 @@ def transcribe(audio_np: np.ndarray) -> str:
     result = stt.transcribe(audio_np, fp16=False)  # Set fp16=True if using a GPU
     text = result["text"].strip()
     return text
+
 
 def get_llm_response(text: str) -> str:
     """
@@ -92,26 +111,34 @@ def get_llm_response(text: str) -> str:
     cleanResponse = re.sub(r'[^a-zA-Z0-9\s.,!?;:\']', '', clean)    
     return cleanResponse
 
+
 def client_program():
+
+    # add host IP and port address
     host = '169.254.61.137'  # IMPORTANT: REPLACE WITH NEW EV3 WIRED IP ADDRESS EACH TIME.
     port = 5043   
 
+    # create socket connection
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
+    # connect EV3 as server host to port 
     client_socket.connect((host, port))
     print("Connected to EV3 robot server.")
 
     console.print("[cyan]HomieBot started! Press Ctrl+C to exit.")
 
+    # introduce homiebot (handles console output)
     introduce_homiebot()
     
     try:
         while True:
             
+            # prompt user to start recording
             console.input(
                 "Press Enter to start recording, then press Enter again to stop."
             )
 
+            # get recorded audio data from user
             data_queue = Queue()  # type: ignore[var-annotated]
             stop_event = threading.Event()
             recording_thread = threading.Thread(
@@ -120,31 +147,34 @@ def client_program():
             )
             recording_thread.start()
 
+            # join audio data for processing
             input()
             stop_event.set()
             recording_thread.join()
-
             audio_data = b"".join(list(data_queue.queue))
             audio_np = (
                 np.frombuffer(audio_data, dtype=np.int16).astype(np.float32) / 32768.0
             )
 
+            # use whisper model to transcribe/print user audio data into English
             if audio_np.size > 0:
                 with console.status("Transcribing...", spinner="earth"):
                     text = transcribe(audio_np)
                 console.print(f"[yellow]You: {text}")
 
+                # use Ollama model to generate response (and print response) to user input
                 with console.status("Generating response...", spinner="earth"):
                     response = get_llm_response(text)
                     console.print(f"[cyan]HomieBot: {response}")
                     # Send the command to the server
                     client_socket.send(response.encode())
 
+    # close server connection
     except KeyboardInterrupt:
         print("Closing connection...")
     finally:
         client_socket.close()
 
-
+# run client side program
 if __name__ == '__main__':
     client_program()
