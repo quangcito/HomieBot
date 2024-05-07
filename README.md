@@ -15,3 +15,5 @@ $ pip install -r requirements.txt
 3. Download all files to EV3. 
 4. Run the`EVServer.py` class in the EV3 SSH terminal. 
 4. Run the `compClient.py` class in terminal and follow the prompts. 
+
+NOTE: There are a lot of issues initating a connecting with the EV3, due to its hardware limitations. While the above steps work in theory, occasionally the connection still fails. Starting the process over should help. 
