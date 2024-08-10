@@ -1,6 +1,6 @@
 # Homie-Bot
 
-*By Arnika Abeysekera, Devinn Chi, Quang Nguyen*
+*By Arnika Abeysekera, Devinn Chi, Quang Aethermai*
 
 
 ## About our project - "HomieBot - The Homie-fication of AI"
