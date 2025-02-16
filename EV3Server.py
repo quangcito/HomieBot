@@ -20,7 +20,7 @@ def introduce_homiebot():
     """
     Introduces HomieBot with a greeting message.
     """
-    intro_message = "What's up dog, my name is HomieBot and my perogative is to be your homie. Let's chat! What is your name?"
+    intro_message = "What's up dog, my name is HomieBot and my perogative is to be your homie. Let's chat!"
     sound.speak(intro_message)
 
 
