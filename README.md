@@ -30,3 +30,10 @@ $ pip install -r requirements.txt
 8. Run the `compClient.py` class in IDE of choice terminal and follow the prompts. 
 
 NOTE: There are a lot of issues initating a connecting with the EV3, due to its hardware limitations. While the above steps work in theory, occasionally the connection still fails. Starting the process over should help. 
+
+1 - open ollama
+2 - wired connection
+3 - redo number
+4 - refresh + redownload files
+5 - open ssh + ev3 server
+6 - run compclient

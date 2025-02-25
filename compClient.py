@@ -79,7 +79,7 @@ def introduce_homiebot():
     """
     Introduces HomieBot with a greeting message.
     """
-    intro_message = "Whats up dog, my name is HomieBot and my perogative is to be your homie. Lets chat!"
+    intro_message = "What's up dog, my name is HomieBot and my perogative is to be your homie. Let's chat!"
     console.print(intro_message)
 
 
@@ -108,14 +108,14 @@ def get_llm_response(text: str) -> str:
     if response.startswith("HomieBot:"):
         response = response[len("HomieBot:") :].strip()
     clean = re.sub(r'\*.*?\*', '', response)
-    cleanResponse = re.sub(r'[^a-zA-Z0-9\s.,!?;:\']', '', clean)    
+    cleanResponse = re.sub(r"[^a-zA-Z0-9\s.,!?;]", "", clean)
     return cleanResponse
 
 
 def client_program():
 
     # add host IP and port address
-    host = '169.254.31.176'  # IMPORTANT: REPLACE WITH NEW EV3 WIRED IP ADDRESS EACH TIME.
+    host = '169.254.20.1'  # IMPORTANT: REPLACE WITH NEW EV3 WIRED IP ADDRESS EACH TIME.
     port = 5043   
 
     # create socket connection

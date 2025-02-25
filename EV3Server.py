@@ -20,7 +20,7 @@ def introduce_homiebot():
     """
     Introduces HomieBot with a greeting message.
     """
-    intro_message = "What's up dog, my name is HomieBot and my perogative is to be your homie. Let's chat!"
+    intro_message = "Whats up dog, my name is HomieBot and my perogative is to be your homie. Lets chat!"
     sound.speak(intro_message)
 
 
@@ -31,7 +31,7 @@ def server_program():
     """
 
     # initialize host ip and port number
-    host = '0.0.0.0'  
+    host = ''  
     port = 5043 
 
     # create socket connection
